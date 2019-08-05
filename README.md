@@ -71,12 +71,77 @@ TBD
 
 ### Register the Service with the Exchange
 
+Ensure you can run docker without sudo.
+
+Linux: 
+``` bash
+sudo usermod -aG docker $USER
+```
+
+OSX:
+``` bash
+sudo dseditgroup -o edit -a $USER -t user admin
+sudo dseditgroup -o edit -a $USER -t user wheel
+```
+
+And ensure you have Horizon keys, if you don't already. 
+To check, look for a file named `~/.hzn/keys/service.private.key`
+
+``` bash
+hzn key create "<org>" "<email>"
+```
+
+And ensure you `source` your credentials and other env vars, 
+like you would to register a pattern.
+
+And ensure you log in to DockerHub:
+
+``` bash
+docker login -u <username>
+```
+
+Populate the environment variables:
+
+```
+source mycreds
+```
+
+Publish your service (after verifying it):
+
+NOTE: If your service definition file points to services that you cannot update in the registry, download them and upload to your registry before running the following command.
+
+```
+hzn exchange service publish -I -f service-jpw.json -k ~/.hzn/keys/service.private.key -K ~/.hzn/keys/service.public.pem
+```
+
+Optionally, check that the service is now in the exchange:
+
+```
+hzn exchange service list
+```
+
 TBD
 
 ### Register the Pattern with the Exchange
 
+Publish the pattern:
+
+```
+hzn exchange pattern publish -f ./pattern.json
+```
+
+Optionally, confirm that the pattern is in the exchange:
+
+```
+hzn exchange pattern list
+```
+
 TBD
 
 ### Configure the Agent for the Pattern
+
+```
+hzn register -n $EXCHANGE_NODEAUTH $HZN_ORG_ID $PATTERN -f input.json
+```
 
 TBD

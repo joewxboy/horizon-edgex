@@ -1,7 +1,7 @@
 {
     "services": [
         {
-            "org": "major-peacock-icp-cluster",
+            "org": "joe.pearson@us.ibm.com",
             "url": "com.github.joewxboy.horizon.edgex",
             "variables": {
                 "EXPORT_DISTRO_CLIENT_HOST":     "export-client",

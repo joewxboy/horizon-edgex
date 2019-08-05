@@ -5,11 +5,11 @@
   "services": [
     {
       "serviceUrl": "com.github.joewxboy.horizon.edgex",
-      "serviceOrgid": "major-peacock-icp-cluster",
+      "serviceOrgid": "joe.pearson@us.ibm.com",
       "serviceArch": "amd64",
       "serviceVersions": [
         {
-          "version": "0.0.1"
+          "version": "1.0.1"
         }
       ]
     }
