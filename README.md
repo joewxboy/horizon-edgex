@@ -39,8 +39,17 @@ docker --version
 
 If it is not installed, use the following steps to install it.
 
-TBD
+On OSX, download the package with the following line, then use Finder to double-click on the file to install.
 
+```
+wget https://download.docker.com/mac/stable/Docker.dmg
+```
+
+On Linux, run the following line to install.  NOTE: You may need to run it as root, in which case you should prefix the line below with `sudo`.
+
+```
+curl -fsSL get.docker.com | sh
+```
 
 #### Install the Horizon Agent software
 
