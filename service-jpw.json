@@ -22,20 +22,20 @@
       "services": {
         "edgex-files": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "image": "edgexfoundry/docker-edgex-volume:1.0.0",
           "privileged": true
         },
         "edgex-core-consul": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "8400/tcp", "HostIP": "0.0.0.0" },
@@ -47,20 +47,20 @@
         },
         "edgex-core-config-seed": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "image": "edgexfoundry/docker-core-config-seed-go:1.0.0",
           "privileged": true
         },
         "edgex-mongo": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "27017/tcp", "HostIP": "0.0.0.0" }
@@ -70,10 +70,10 @@
         },
         "edgex-support-logging": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "48061/tcp", "HostIP": "0.0.0.0" }
@@ -83,10 +83,10 @@
         },
         "edgex-core-metadata": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "48081/tcp", "HostIP": "0.0.0.0" }
@@ -96,10 +96,10 @@
         },
         "edgex-core-data": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "48080/tcp", "HostIP": "0.0.0.0" },
@@ -110,10 +110,10 @@
         },
         "edgex-core-command": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "48082/tcp", "HostIP": "0.0.0.0" }
@@ -123,10 +123,10 @@
         },
         "edgex-device-random": {
           "binds": [
-            "${EDGEX_DB_DATA}:/data/db",
-            "${EDGEX_LOG_DATA}:/edgex/logs",
-            "${EDGEX_CONSUL_CONFIG}:/consul/config",
-            "${EDGEX_CONSUL_DATA}:/consul/data"
+            "db-data:/data/db",
+            "log-data:/edgex/logs",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
           ],
           "specific_ports": [
             { "HostPort": "49988/tcp", "HostIP": "0.0.0.0" }
