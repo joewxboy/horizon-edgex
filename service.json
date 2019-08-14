@@ -4,7 +4,7 @@
     "description": "EdgeX Foundry service",
     "documentation": "",
     "url": "com.github.joewxboy.horizon.edgex",
-    "version": "0.0.1",
+    "version": "1.0.3",
     "arch": "amd64",
     "public": false,
     "sharable": "singleton",
@@ -54,9 +54,6 @@
             "${EDGEX_CONSUL_DATA}:/consul/data"
           ],
           "specific_ports": [
-            { "HostPort": "8400/tcp", "HostIP": "0.0.0.0" },
-            { "HostPort": "8500/tcp", "HostIP": "0.0.0.0" },
-            { "HostPort": "8600/tcp", "HostIP": "0.0.0.0" }
           ],
           "image": "edgexfoundry/docker-core-config-seed-go:1.0.0",
           "privileged": true
