@@ -9,7 +9,11 @@
       "serviceArch": "amd64",
       "serviceVersions": [
         {
+<<<<<<< HEAD
           "version": "1.0.1"
+=======
+          "version": "1.0.3"
+>>>>>>> Fix port mapping issue. Add README.md info on volume setup.
         }
       ]
     }

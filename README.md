@@ -109,7 +109,21 @@ And ensure you log in to DockerHub:
 docker login -u <username>
 ```
 
-Populate the environment variables:
+Populate the environment variables (mycreds should contain at least these):
+
+```
+export HZN_ORG_ID=...
+export HZN_DEVICE_ID=...
+export HZN_DEVICE_TOKEN=...
+export HZN_EXCHANGE_USER_AUTH=...
+export EXCHANGE_NODEAUTH="$HZN_DEVICE_ID:$HZN_DEVICE_TOKEN"
+export EDGEX_DB_DATA="/var/run/edgex/data"
+export EDGEX_LOG_DATA="/var/run/edgex/logs"
+export EDGEX_CONSUL_DATA="/var/run/edgex/consul/data"
+export EDGEX_CONSUL_CONFIG="/var/run/edgex/consul/config"
+```
+
+Push them into the environment:
 
 ```
 source mycreds
@@ -120,7 +134,7 @@ Publish your service (after verifying it):
 NOTE: If your service definition file points to services that you cannot update in the registry, download them and upload to your registry before running the following command.
 
 ```
-hzn exchange service publish -I -f service-jpw.json -k ~/.hzn/keys/service.private.key -K ~/.hzn/keys/service.public.pem
+hzn exchange service publish -I -f service-jpw.json -k ~/.hzn/keys/service.private.key -K ~/.hzn/keys/service.public.pem -P
 ```
 
 Optionally, check that the service is now in the exchange:
@@ -146,6 +160,29 @@ hzn exchange pattern list
 ```
 
 TBD
+
+### Setup host directories and docker volumes
+
+Manually create the volumes that will be used:
+
+```
+docker volume create db-data
+docker volume create log-data
+docker volume create consul-data
+docker volume create consul-config
+```
+
+(Optionally) verify the volumes have been created: `docker volume list`
+
+Manually setup and open the permissions on the host directories being bound:
+
+```
+mkdir -p /var/run/edgex/logs
+mkdir -p /var/run/edgex/data
+mkdir -p /var/run/edgex/consul/data
+mkdir -p /var/run/edgex/consul/config
+chmod -R a+rwx /var/run/edgex
+```
 
 ### Configure the Agent for the Pattern
 
