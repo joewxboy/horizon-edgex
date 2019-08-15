@@ -23,7 +23,7 @@
         "edgex-files": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -33,7 +33,7 @@
         "edgex-core-consul": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -48,7 +48,7 @@
         "edgex-core-config-seed": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -58,7 +58,7 @@
         "edgex-mongo": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -71,7 +71,7 @@
         "edgex-support-logging": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -84,7 +84,7 @@
         "edgex-core-metadata": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -97,7 +97,7 @@
         "edgex-core-data": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -111,7 +111,7 @@
         "edgex-core-command": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
@@ -124,7 +124,7 @@
         "edgex-device-random": {
           "binds": [
             "db-data:/data/db",
-            "log-data:/edgex/logs",
+            "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
             "consul-data:/consul/data"
           ],
