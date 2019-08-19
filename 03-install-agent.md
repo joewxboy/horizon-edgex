@@ -115,6 +115,6 @@ Check to ensure that it is working and your machine/node is "unconfigured"
 hzn node list
 ```
 
-# next
+# Next
 
 [Configure the Agent](04-configure-anax.md).
