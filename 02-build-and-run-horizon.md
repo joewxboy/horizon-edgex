@@ -6,7 +6,7 @@ This continues the instructions from [Horizon Dev Services Setup](01-horizon-ser
 
 ## Build the Services
 
-```
+``` bash
 cd /go/src/github.com/open-horizon/anax
 make
 cd test
@@ -21,15 +21,15 @@ Go to the `run-exchange:` section and change the IP address from `127.0.0.1` to 
 
 Then build and run the services:
 
-```
+``` bash
 make run-dockerreg
 make run-agbot
 make run-exchange
 ```
 
-Last,  as the root user, we'll create an organization named `testorg` and create a user in that organization with admin privileged named `joe` with a password of `joe`:
+Last,  as the root user, we'll create an organization named `testorg` and create a user in that organization with admin privileged named `joe` with a password of `cool`:
 
-```
+``` bash
 export HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1
 export EDGE_EXCHANGE_ROOT_PASS="Horizon-Rul3s"
 export HZN_EXCHANGE_USER_AUTH="root/root:$EDGE_EXCHANGE_ROOT_PASS"
