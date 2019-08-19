@@ -33,7 +33,7 @@ curl -fsSL get.docker.com | sh
 apt-get install -y docker-compose
 ```
 
-Set up your GOPATH and related environment variables.  *NOTE*: The GOPATH _must_ be under $(USER) or the test scripts will throw errors.
+Set up your GOPATH and related environment variables.  *NOTE*: The GOPATH _must_ not be in a system folder or the test scripts will throw errors.
 
 ``` bash
 mkdir -p /go/src/github.com/open-horizon
