@@ -48,7 +48,8 @@ Created keys:
 
 Copy the string in the key filenames between `testorg-` and `-p` in the filename.  We'll use that below.
 
-Place the `service-jpw.json` and `pattern.json` files in the `/tmp/hzndev` folder, or modify the paths below to point to where they currently reside.
+Place the `[service-jpw.json](service-jpw.json)` and `[pattern.json](pattern.json)` files 
+into the `/tmp/hzndev` folder, or modify the paths below to point to where they currently reside.
 
 This will publish the _service_ definition to the exchange.  Remember to replace the `433...` string with your value:
 
@@ -105,7 +106,7 @@ export EXCHANGE_NODEAUTH="$HZN_DEVICE_ID:$HZN_DEVICE_TOKEN"
 export PATTERN='testorg/pattern-edgex-amd64'
 ```
 
-Create a file in /tmp/hzndev named input.json:
+Create a file in /tmp/hzndev named [input.json](input.json):
 
 ``` json
 {
@@ -140,7 +141,8 @@ To confirm that your edge node is registered for the pattern, run:
 hzn node list
 ```
 
-and confirm that the response shows your node ID of `ubuntuvm` and that you're configured for the `testorg/pattern-edgex-amd64` pattern.
+and confirm that the response shows your node ID of `ubuntuvm` 
+and that you're configured for the `testorg/pattern-edgex-amd64` pattern.
 
 To check on the status of the agreement, use:
 

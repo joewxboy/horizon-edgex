@@ -4,6 +4,16 @@ This document will give you the steps needed to get a small dev instance of the 
 It will not, and should not, be used to serve edge devices in a production environment. 
 However, it is sufficient to test services.
 
+## Goals
+
+In this POC configuration you will be setting up Horizon Services in one tier (Exchange, Switchboard, AgBots), 
+and then the Horizon Agent (Anax) in another tier.  
+You will be configuring an organization and an admin-enabled user account (into that organization) on the Horizon Exchange, 
+and then using the Horizon Agent to register the EdgeX micro-services as a single Service and a Pattern. 
+You will finally register the device that is running the Agent as an edge Node with the Exchange, 
+which will trigger the Pattern to be downloaded by the Node, 
+which will in turn stand up the micro-services, monitor them, and keep them running.
+
 ## Pre-requisites
 
 ### Horizon Services
@@ -32,6 +42,12 @@ curl https://dl.google.com/go/go1.11.4.linux-amd64.tar.gz | tar -xzf- -C /usr/lo
 export PATH=$PATH:/usr/local/go/bin
 ```
 
+You may confirm that Go was successfully installed and is in your PATH by checking the version:
+
+``` bash
+go version
+```
+
 Install Docker from source (to get the required newest version), and utilities.
 
 ``` bash
@@ -45,7 +61,8 @@ You can confirm Docker was installed successfully by checking the version:
 docker --version
 ```
 
-Set up your GOPATH and related environment variables.  *NOTE*: The GOPATH _must_ not be in a system folder or the test scripts will throw errors.
+Set up your GOPATH and related environment variables.  
+*NOTE*: The GOPATH _must_ not be in a system folder or else the test scripts will throw errors.
 
 ``` bash
 mkdir -p /go/src/github.com/open-horizon

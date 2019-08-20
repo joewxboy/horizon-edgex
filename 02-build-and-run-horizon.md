@@ -13,7 +13,10 @@ cd test
 make
 ```
 
-If there were any errors (not warnings), you may have missed a step.  Please go back and check.
+If there were any errors (not warnings), you may have missed a step or your VM does not have enough memory.  
+Please go back and check.
+
+-----
 
 Next, edit the Makefile to expose the exchange service to your VM's external IP address.
 
@@ -27,7 +30,14 @@ make run-agbot
 make run-exchange
 ```
 
-Last,  as the root user, we'll create an organization named `testorg` and create a user in that organization with admin privileged named `joe` with a password of `cool`:
+At this point the Horizon Services should be running.  
+You can confirm this by running `docker ps` and seeing four services running. 
+*NOTE*: You may need to open port 8080 to eternal requests if it is not already open.
+
+-----
+
+Last,  as the root user, we'll create an organization named `testorg` 
+and create a user in that organization with admin privileges named `joe` with a password of `cool`:
 
 ``` bash
 export HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1

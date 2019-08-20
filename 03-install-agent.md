@@ -3,8 +3,9 @@
 This continues the instructions from [Horizon Dev Services Setup](01-horizon-services-setup.md) and 
 [Build and Run](02-build-and-run-horizon.md) the Horizon Dev Services.
 
-Stand up your environment for Horizon Agent (Anax) and open a shell.  
-Do not attempt this in the same environment as the Horizon Services due to port conflicts and environment variable collisions.
+Stand up your environment in the other tier for the Horizon Agent (Anax) and open a shell.  
+Do not attempt this in the same environment as the Horizon Services 
+due to port conflicts and environment variable collisions.
 Instructions below are for either Ubuntu or OSX.
 
 ## For OSX
@@ -37,7 +38,8 @@ Download and install the Edge Fabric client
 wget http://pkg.bluehorizon.network/macos/horizon-cli-2.23.1.pkg
 ```
 
-Install first, then start the client
+Install first (you may use the GUI and double-click on the file to install), 
+then start the client using the command below:
 
 ``` bash
 horizon-container start
@@ -88,7 +90,8 @@ docker --version
 
 Configure package manager for the Edge Fabric client
 
-IMPORTANT, Copy the next 6 lines verbatim and paste in one operation
+IMPORTANT, Copy the next 6 lines verbatim and paste in one operation. 
+*NOTE*: If you did not copy the CRLF after `EOF`, then you will need to press Enter/Return on your keyboard.
 
 ``` bash
 wget -qO - http://pkg.bluehorizon.network/bluehorizon.network-public.key | apt-key add -
@@ -97,6 +100,7 @@ cat <<EOF > /etc/apt/sources.list.d/bluehorizon.list
 deb [arch=$(dpkg --print-architecture)] http://pkg.bluehorizon.network/linux/ubuntu xenial-$aptrepo main
 deb-src [arch=$(dpkg --print-architecture)] http://pkg.bluehorizon.network/linux/ubuntu xenial-$aptrepo main
 EOF
+
 ```
 
 Refresh package manager index list
@@ -140,7 +144,8 @@ and is useful for confirming proper configuration.
 
 To fix this, you will edit the responsible configuration file and then restart the agent service.
 
-Edit the file at `/etc/horizon/hzn.json` and add the value for the exchange URL to be of the form `http://127.0.0.1:8080/v1/`. 
+Edit the file at `/etc/horizon/hzn.json` using `sudo` 
+and add the value for the exchange URL to be of the form `http://127.0.0.1:8080/v1/`. 
 Please note two important details: first, the protocol is `http` instead of `https` (due to lack of a public signed cert), 
 and second, the URL *must* end with a trailing slash, even though the corresponding environment variable does not.  
 Replace `127.0.0.1` with the actual public IP address of your Horizon Services.
