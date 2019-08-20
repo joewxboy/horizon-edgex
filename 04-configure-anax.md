@@ -11,6 +11,7 @@ First, configure environment variables so the agent can connect to the exchange.
 ``` bash
 export HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1
 export ORG_ID=testorg
+export HZN_ORG_ID=testorg
 export HZN_EXCHANGE_USER_AUTH=joe:cool
 hzn exchange user list
 ```

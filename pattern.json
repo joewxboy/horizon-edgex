@@ -5,11 +5,11 @@
   "services": [
     {
       "serviceUrl": "com.github.joewxboy.horizon.edgex",
-      "serviceOrgid": "joe.pearson@us.ibm.com",
+      "serviceOrgid": "testorg",
       "serviceArch": "amd64",
       "serviceVersions": [
         {
-          "version": "1.0.3"
+          "version": "1.0.1"
         }
       ]
     }

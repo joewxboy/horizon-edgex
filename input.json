@@ -1,7 +1,7 @@
 {
     "services": [
         {
-            "org": "joe.pearson@us.ibm.com",
+            "org": "testorg",
             "url": "com.github.joewxboy.horizon.edgex",
             "variables": {
                 "EXPORT_DISTRO_CLIENT_HOST":     "export-client",
