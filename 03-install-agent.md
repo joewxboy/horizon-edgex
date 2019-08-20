@@ -63,6 +63,34 @@ When the Anax agent is properly configured,
 it will point to the public IP address of the Horizon Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
 and is useful for confirming proper configuration.
 
+To fix, stop the container, create a file at `/etc/default/horizon` with the contents below, then restart the container and test.
+
+``` bash
+horizon-container stop
+sudo mkdir -p /etc/default
+sudo touch /etc/default/horizon
+```
+
+Then edit the `/etc/default/horizon` file and insert the following contents. 
+*NOTE*: Replace `127.0.0.1` with your Horizon Services public IP address.
+
+```
+HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1/
+HZN_FSS_CSSURL=https://alpha.edge-fabric.com/css/
+```
+
+Then re-start the container:
+
+``` bash
+horizon-container start
+```
+
+And then check the output to confirm that the exchange api value is now set to your exchange service public IP address:
+
+``` bash
+hzn node list
+```
+
 -----
 
 ## For Ubuntu
