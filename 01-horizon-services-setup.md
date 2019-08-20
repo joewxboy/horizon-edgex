@@ -6,12 +6,18 @@ However, it is sufficient to test services.
 
 ## Pre-requisites
 
+### Horizon Services
 + OS: Ubuntu server, latest build recommended.  Instructions assume this.
-+ VM: 1Gb RAM, 20Gb storage, 1vCPU, root access
++ VM: 4Gb RAM, 20Gb storage, 1vCPU, root access
+
+### Horizon Agent (Anax)
++ OS: Ubuntu server or desktop (latest build recommended), or OSX.  
++ VM: 1Gb RAM, 10Gb storage, 1vCPU, root access
 
 ## Initial setup
 
-Update utilities.  *NOTE*: You will perform all of these tasks as root through `sudo`.
+Stand up your environment for Horizon Services and open a shell to update utilities.  
+*NOTE*: You will perform all of these tasks as root through `sudo`.
 
 ``` bash
 sudo -s
@@ -31,6 +37,12 @@ Install Docker from source (to get the required newest version), and utilities.
 ``` bash
 curl -fsSL get.docker.com | sh
 apt-get install -y docker-compose
+```
+
+You can confirm Docker was installed successfully by checking the version:
+
+``` bash
+docker --version
 ```
 
 Set up your GOPATH and related environment variables.  *NOTE*: The GOPATH _must_ not be in a system folder or the test scripts will throw errors.

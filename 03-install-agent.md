@@ -3,6 +3,10 @@
 This continues the instructions from [Horizon Dev Services Setup](01-horizon-services-setup.md) and 
 [Build and Run](02-build-and-run-horizon.md) the Horizon Dev Services.
 
+Stand up your environment for Horizon Agent (Anax) and open a shell.  
+Do not attempt this in the same environment as the Horizon Services due to port conflicts and environment variable collisions.
+Instructions below are for either Ubuntu or OSX.
+
 ## For OSX
 
 Install brew package manager
@@ -46,6 +50,16 @@ hzn version
 
 hzn node list
 ```
+
+When you look at the output for `hzn node list`, pay attention to the line for the exchange api:
+
+``` json
+"exchange_api": "https://alpha.edge-fabric.com/v1/"
+```
+
+When the Anax agent is properly configured, 
+it will point to the public IP address of the Horizon Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
+and is useful for confirming proper configuration.
 
 -----
 
@@ -114,6 +128,30 @@ Check to ensure that it is working and your machine/node is "unconfigured"
 ``` bash
 hzn node list
 ```
+When you look at the output for `hzn node list`, pay attention to the line for the exchange api:
+
+``` json
+"exchange_api": "https://alpha.edge-fabric.com/v1/"
+```
+
+When the Anax agent is properly configured, 
+it will point to the public IP address of the Horizon Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
+and is useful for confirming proper configuration.
+
+To fix this, you will edit the responsible configuration file and then restart the agent service.
+
+Edit the file at `/etc/horizon/hzn.json` and add the value for the exchange URL to be of the form `http://127.0.0.1:8080/v1/`. 
+Please note two important details: first, the protocol is `http` instead of `https` (due to lack of a public signed cert), 
+and second, the URL *must* end with a trailing slash, even though the corresponding environment variable does not.  
+Replace `127.0.0.1` with the actual public IP address of your Horizon Services.
+
+Restart the agent service:
+
+``` bash
+service restart horizon
+```
+
+and confirm that the change took effect by re-running `hzn node list` and checking the `exchange_api` value.
 
 # Next
 
