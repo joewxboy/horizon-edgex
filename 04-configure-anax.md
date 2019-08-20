@@ -129,6 +129,27 @@ Create a file in /tmp/hzndev named [input.json](input.json):
 }
 ```
 
+Manually create the volumes that will be used:
+
+```
+docker volume create db-data
+docker volume create log-data
+docker volume create consul-data
+docker volume create consul-config
+```
+
+(Optionally) verify the volumes have been created: `docker volume list`
+
+Manually setup and open the permissions on the host directories being bound:
+
+```
+mkdir -p /var/run/edgex/logs
+mkdir -p /var/run/edgex/data
+mkdir -p /var/run/edgex/consul/data
+mkdir -p /var/run/edgex/consul/config
+chmod -R a+rwx /var/run/edgex
+```
+
 Then register for the pattern:
 
 ``` bash
