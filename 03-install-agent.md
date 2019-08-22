@@ -181,7 +181,7 @@ Replace `127.0.0.1` with the actual public IP address of your Horizon Services.
 Restart the agent service:
 
 ``` bash
-service restart horizon
+systemctl restart horizon
 ```
 
 and confirm that the change took effect by re-running `hzn node list` and checking the `exchange_api` value.
