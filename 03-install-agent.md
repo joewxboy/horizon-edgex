@@ -178,10 +178,12 @@ Please note two important details: first, the protocol is `http` instead of `htt
 and second, the URL *must* end with a trailing slash, even though the corresponding environment variable does not.  
 Replace `127.0.0.1` with the actual public IP address of your Horizon Services.
 
+Also edit the file at `/etc/default/horizon` using `sudo` to add the same exchange URL to the end of the first line.
+
 Restart the agent service:
 
 ``` bash
-service restart horizon
+sudo systemctl restart horizon
 ```
 
 and confirm that the change took effect by re-running `hzn node list` and checking the `exchange_api` value.
