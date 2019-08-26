@@ -18,7 +18,7 @@ Stand up your environment for Horizon Services and open a shell to update utilit
 ``` bash
 sudo -s
 apt-get -y update
-apt-get install -y jq make gcc
+apt-get install -y curl jq make gcc
 ```
 
 Install Go from source (don't use `apt` or `snap`) since the `src` and `pkg` and `bin` folders will be needed.
