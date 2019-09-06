@@ -1,5 +1,5 @@
 [Service]
-Host = "localhost"
+Host = "device-random"
 Port = 49988
 ConnectRetries = 3
 Labels = []
@@ -15,6 +15,7 @@ CheckInterval = "10s"
 FailLimit = 3
 FailWaitTime = 10
 Type = "consul"
+Timeout = 0
 
 [Logging]
 EnableRemote = true

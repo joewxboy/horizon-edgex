@@ -6,7 +6,7 @@ EnableValueDescriptorManagement = false
 BootTimeout = 30000
 ClientMonitor = 15000
 CheckInterval = '10s'
-Host = 'localhost'
+Host = 'edgex-core-metadata'
 Port = 48081
 Protocol = 'http'
 MaxResultCount = 50000
@@ -20,16 +20,16 @@ Type = 'consul'
 
 [Logging]
 EnableRemote = false
-File = './logs/edgex-core-metadata.log'
+File = '/edgex/logs/edgex-core-metadata.log'
 
 [Clients]
   [Clients.Logging]
   Protocol = 'http'
-  Host = 'localhost'
+  Host = 'edgex-support-logging'
   Port = 48061
   [Clients.Notifications]
   Protocol = 'http'
-  Host = 'localhost'
+  Host = 'edgex-support-notifications'
   Port = 48060
   [Clients.CoreData]
   Protocol = 'http'
@@ -39,18 +39,18 @@ File = './logs/edgex-core-metadata.log'
 
 [Databases]
   [Databases.Primary]
-  Host = 'localhost'
+  Host = 'edgex-mongo'
   Name = 'metadata'
-  Password = ''
+  Password = 'password'
   Port = 27017
-  Username = ''
+  Username = 'meta'
   Timeout = 5000
   Type = 'mongodb'
 
 [Notifications]
-PostDeviceChanges = true
-Slug = 'device-change-'
 Content = 'Device update: '
-Sender = 'core-metadata'
 Description = 'Metadata device notice'
 Label = 'metadata'
+PostDeviceChanges = true
+Sender = 'edgex-core-metadata'
+Slug = 'device-change-'
