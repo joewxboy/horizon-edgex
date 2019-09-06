@@ -147,8 +147,12 @@ mkdir -p /var/run/edgex/logs
 mkdir -p /var/run/edgex/data
 mkdir -p /var/run/edgex/consul/data
 mkdir -p /var/run/edgex/consul/config
+mkdir -p /root/res
 chmod -R a+rwx /var/run/edgex
+chmod -R a+rwx /root/res
 ```
+
+Copy the configuration files from the `res` folder in this repository to the `/root/res` folder on the host.
 
 Then register for the pattern:
 
