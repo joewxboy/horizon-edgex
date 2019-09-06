@@ -48,7 +48,11 @@
             "db-data:/data/db",
             "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
-            "consul-data:/consul/data"
+            "consul-data:/consul/data",
+            "/root/res/logging-config.toml:/res/docker/configuration.toml:ro"
+          ],
+          "command": [
+            "--registry=false"
           ],
           "specific_ports": [
             { "HostPort": "48061/tcp", "HostIP": "0.0.0.0" }
@@ -61,7 +65,11 @@
             "db-data:/data/db",
             "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
-            "consul-data:/consul/data"
+            "consul-data:/consul/data",
+            "/root/res/metadata-config.toml:/res/docker/configuration.toml:ro"
+          ],
+          "command": [
+            "--registry=false"
           ],
           "specific_ports": [
             { "HostPort": "48081/tcp", "HostIP": "0.0.0.0" }
@@ -74,7 +82,11 @@
             "db-data:/data/db",
             "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
-            "consul-data:/consul/data"
+            "consul-data:/consul/data",
+            "/root/res/data-config.toml:/res/docker/configuration.toml:ro"
+          ],
+          "command": [
+            "--registry=false"
           ],
           "specific_ports": [
             { "HostPort": "48080/tcp", "HostIP": "0.0.0.0" },
@@ -88,7 +100,11 @@
             "db-data:/data/db",
             "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
-            "consul-data:/consul/data"
+            "consul-data:/consul/data",
+            "/root/res/command-config.toml:/res/docker/configuration.toml:ro"
+          ],
+          "command": [
+            "--registry=false"
           ],
           "specific_ports": [
             { "HostPort": "48082/tcp", "HostIP": "0.0.0.0" }
@@ -101,7 +117,9 @@
             "db-data:/data/db",
             "log-data:/edgex/logs:rw",
             "consul-config:/consul/config",
-            "consul-data:/consul/data"
+            "consul-data:/consul/data",
+            "/root/res/device-random-config.toml:/res/configuration.toml:ro",
+            "/root/res/device-random.yaml:/res/device-random.yaml:ro"
           ],
           "specific_ports": [
             { "HostPort": "49988/tcp", "HostIP": "0.0.0.0" }
