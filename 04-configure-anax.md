@@ -48,7 +48,7 @@ Created keys:
 
 Copy the string in the key filenames between `testorg-` and `-p` in the filename.  We'll use that below.
 
-Place the `[service-jpw.json](service-jpw.json)` and `[pattern.json](pattern.json)` files 
+Place the [service-jpw.json](service-jpw.json) and [pattern.json](pattern.json) files 
 into the `/tmp/hzndev` folder, or modify the paths below to point to where they currently reside.
 
 This will publish the _service_ definition to the exchange.  Remember to replace the `433...` string with your value:
