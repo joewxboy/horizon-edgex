@@ -157,7 +157,7 @@ Copy the configuration files from the `res` folder in this repository to the `/r
 Then register for the pattern:
 
 ``` bash
-hzn register -n $EXCHANGE_NODEAUTH $HZN_ORG_ID $PATTERN -f /tmp/hzndev/input.json
+hzn register testorg pattern-edgex-amd64 -f /tmp/hzndev/input.json
 ```
 
 To confirm that your edge node is registered for the pattern, run:
