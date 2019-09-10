@@ -28,6 +28,8 @@ curl https://dl.google.com/go/go1.11.4.linux-amd64.tar.gz | tar -xzf- -C /usr/lo
 export PATH=$PATH:/usr/local/go/bin
 ```
 
+If you want the environment variables to persist, also add them to the bottom of your BASH file at `~/.bashrc`.
+
 You may confirm that Go was successfully installed and is in your PATH by checking the version:
 
 ``` bash
@@ -49,24 +51,14 @@ docker --version
 
 Set up your GOPATH and related environment variables.  
 *NOTE*: The GOPATH _must_ not be in a system folder or else the test scripts will throw errors.
+Also retrieve required Go utility `govendor` and Open Horizon.
 
 ``` bash
-mkdir -p /go/src/github.com/open-horizon
 export GOPATH=/go
-export ANAX_SOURCE=/go/src/github.com/open-horizon/anax
-```
-
-Install required `go` utilities.  *NOTE*: You must use this method, and not `apt`, or the test scripts will throw errors.
-
-``` bash
+mkdir -p /go/src
+go get -u github.com/open-horizon/anax
 go get -u github.com/kardianos/govendor
-```
-
-Clone the Open Horizon project code.
-
-``` bash
-cd /go/src/github.com/open-horizon
-git clone https://github.com/open-horizon/anax.git
+export ANAX_SOURCE=/go/src/github.com/open-horizon/anax
 ```
 
 ## Next
