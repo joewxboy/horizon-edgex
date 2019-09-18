@@ -5,6 +5,7 @@
 ### Horizon Services
 + OS: Ubuntu server, latest build recommended.  Instructions assume this.
 + VM: 4Gb RAM, 20Gb storage, 1vCPU, root access
++ NOTE: Ensure you are not installing and running this on a system that is has a service already using port 80.
 
 ### Horizon Agent (Anax)
 + OS: Ubuntu server or desktop (latest build recommended), or OSX.  
@@ -28,7 +29,7 @@ curl https://dl.google.com/go/go1.11.4.linux-amd64.tar.gz | tar -xzf- -C /usr/lo
 export PATH=$PATH:/usr/local/go/bin
 ```
 
-If you want the environment variables to persist, also add them to the bottom of your BASH file at `~/.bashrc`.
+NOTE: If you want the environment variables to persist, also add them to the bottom of your BASH file at `~/.bashrc`.
 
 You may confirm that Go was successfully installed and is in your PATH by checking the version:
 
@@ -49,15 +50,14 @@ You can confirm Docker was installed successfully by checking the version:
 docker --version
 ```
 
-Set up your GOPATH and related environment variables.  
+Set up your GOPATH and related environment variables.
+
 *NOTE*: The GOPATH _must_ not be in a system folder or else the test scripts will throw errors.
-Also retrieve required Go utility `govendor` and Open Horizon.
 
 ``` bash
 export GOPATH=/go
 mkdir -p /go/src
 go get -u github.com/open-horizon/anax
-go get -u github.com/kardianos/govendor
 export ANAX_SOURCE=/go/src/github.com/open-horizon/anax
 ```
 

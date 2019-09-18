@@ -2,7 +2,9 @@
 
 This continues the instructions from [Horizon Dev Services Setup](01-horizon-services-setup.md).
 
-*NOTE*: This assumes you are running as root (with `sudo`) on the Ubuntu VM as described in the previous set of instructions and are continuing in the same session.
+*NOTE*: This assumes you are running as root (with `sudo`) on the Ubuntu VM 
+as described in the previous set of instructions and are continuing in the same session. 
+If you are not, you may need to export all previous environment variables from step 1.
 
 ## Build the Services
 
@@ -13,8 +15,10 @@ cd test
 make
 ```
 
-If there were any errors (not warnings), you may have missed a step or your VM does not have enough memory.  
-Please go back and check.
+If there were any errors (not warnings), you may have missed a step or your VM does not have enough memory 
+or the apt repo was busy with a mirror sync or there was a network hiccup.
+
+Please go back and check, then try again.
 
 -----
 
