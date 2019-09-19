@@ -54,7 +54,7 @@ into the `/tmp/hzndev` folder, or modify the paths below to point to where they 
 This will publish the _service_ definition to the exchange.  Remember to replace the `433...` string with your value:
 
 ```
-hzn exchange service publish -I -f /tmp/hzndev/service-jpw.json \
+hzn exchange service publish -P -f /tmp/hzndev/service-jpw.json \
   -k /tmp/hzndev/testorg-433683b019219acf8cb22790746d92937b62d994-private.key \
   -K /tmp/hzndev/testorg-433683b019219acf8cb22790746d92937b62d994-public.pem
 ```
