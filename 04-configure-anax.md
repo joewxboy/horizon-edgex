@@ -48,7 +48,7 @@ Created keys:
 
 Copy the string in the key filenames between `testorg-` and `-p` in the filename.  We'll use that below.
 
-Place the [service-jpw.json](service-jpw.json) and [pattern.json](pattern.json) files 
+Place the [service.json](./configs/service.json) and [pattern.json](./configs/pattern.json) files 
 into the `/tmp/hzndev` folder, or modify the paths below to point to where they currently reside.
 
 This will publish the _service_ definition to the exchange.  Remember to replace the `433...` string with your value:
@@ -93,20 +93,20 @@ It should respond with:
 ]
 ```
 
-Last, let's configure the Anax agent so that it can register for the pattern.
+Last, let's configure the Anax Agent so that it can register for the Deployment Pattern.
 
 Set some environment variables:
 
 ``` bash
 export HZN_ORG_ID='testorg'
-export HZN_DEVICE_ID='ubuntuvm'
+export HZN_DEVICE_ID='ubuntuvm' # Or whatever name you want to use here
 export HZN_DEVICE_TOKEN='iamnotapw'
 export HZN_EXCHANGE_USER_AUTH='joe:cool'
 export EXCHANGE_NODEAUTH="$HZN_DEVICE_ID:$HZN_DEVICE_TOKEN"
 export PATTERN='testorg/pattern-edgex-amd64'
 ```
 
-Create a file in /tmp/hzndev named [input.json](input.json):
+Create a file in /tmp/hzndev named [input.json](./configs/input.json):
 
 ``` json
 {

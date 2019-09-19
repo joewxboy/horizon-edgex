@@ -68,7 +68,7 @@ If all is well, let's continue by listing the existing Organizations:
 curl -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs | jq .
 ```
 
-Add an Organization names `testorg`:
+Add an Organization named `testorg`:
 
 ``` bash
 curl -sSf -X POST -u ${HZN_EXCHANGE_USER_AUTH} -H "Content-Type:application/json" -d '{"label": "testorg", "description": "Organization for Testing"}' ${HZN_EXCHANGE_URL}orgs/testorg | jq .
@@ -97,13 +97,13 @@ First, list the current users in `testorg`, which should be empty and throw a 40
 curl -sSf -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/testorg/users | jq .
 ```
 
-Then we'll add our admin user:
+Then add the admin user:
 
 ``` bash
 curl -sSf -X POST -u ${HZN_EXCHANGE_USER_AUTH} -H "Content-Type:application/json" -d '{"password":"cool","email": "joe@everywhere.com", "admin": true}' ${HZN_EXCHANGE_URL}orgs/testorg/users/joe | jq .
 ```
 
-And then list the current users again to confirm that the new user is now in the list:
+Then list the current users again to confirm that the new user is now in the list:
 
 ``` bash
 curl -sSf -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/testorg/users | jq .

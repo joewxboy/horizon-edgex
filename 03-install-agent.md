@@ -116,7 +116,7 @@ curl -fsSL get.docker.com | sh
 docker --version
 ```
 
-Configure package manager for the Edge Fabric client
+Configure package manager for the Anax Agent:
 
 IMPORTANT, Copy the next 6 lines verbatim and paste in one operation. 
 *NOTE*: If you did not copy the CRLF after `EOF`, then you will need to press Enter/Return on your keyboard.
@@ -137,7 +137,7 @@ Refresh package manager index list
 apt-get -y update
 ```
 
-Install and test the Edge Fabric Client
+Install and test the Agent
 
 ``` bash
 apt-get -y install bluehorizon
@@ -166,7 +166,7 @@ When you look at the output for `hzn node list`, pay attention to the line for t
 "exchange_api": "https://alpha.edge-fabric.com/v1/"
 ```
 
-When the Anax agent is properly configured, 
+When the Agent is properly configured, 
 it will point to the public IP address of the Horizon Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
 and is useful for confirming proper configuration.
 
@@ -180,7 +180,7 @@ Replace `127.0.0.1` with the actual public IP address of your Horizon Services.
 
 Also edit the file at `/etc/default/horizon` using `sudo` to add the same exchange URL to the end of the first line.
 
-Restart the agent service:
+Restart the Agent service:
 
 ``` bash
 sudo systemctl restart horizon
