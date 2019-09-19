@@ -1,8 +1,8 @@
 # Configure the Anax Agent
 
-This continues the instructions from [Horizon Dev Services Setup](01-horizon-services-setup.md) and 
-[Build and Run](02-build-and-run-horizon.md) the Horizon Dev Services and 
-[Install the Anax agent](03-install-agent.md) software.
+This continues the instructions from [Install the Open Horizon Services](01-horizon-services-setup.md) and 
+[Build and Run](02-build-and-run-horizon.md) the Open Horizon Services and 
+[Install the Open Horizon Agent](03-install-agent.md) software.
 
 First, configure environment variables so the agent can connect to the exchange.
 

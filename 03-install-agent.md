@@ -1,7 +1,7 @@
-# Install the Anax Agent software
+# Install the Open Horizon Agent
 
-This continues the instructions from [Horizon Dev Services Setup](01-horizon-services-setup.md) and 
-[Build and Run](02-build-and-run-horizon.md) the Horizon Dev Services.
+This continues the instructions from [Install the Open Horizon Services](01-horizon-services-setup.md) and 
+[Build and Run](02-build-and-run-horizon.md) the Open Horizon Services.
 
 Stand up your environment in the other tier for the Horizon Agent (Anax) and open a shell.  
 Do not attempt this in the same environment as the Horizon Services 
@@ -106,7 +106,7 @@ sudo -s
 Update the package manager
 
 ``` bash
-apt -y update
+apt-get -y update
 ```
 
 Install and test Docker
@@ -140,7 +140,7 @@ apt-get -y update
 Install and test the Edge Fabric Client
 
 ``` bash
-apt-get install -y bluehorizon
+apt-get -y install bluehorizon
 ```
 
 IMPORTANT, exit out of root, back to your user account

@@ -1,61 +1,114 @@
-# Build and Run the Horizon Dev Services
+# Build and Run the Open Horizon Services
 
-This continues the instructions from [Horizon Dev Services Setup](01-horizon-services-setup.md).
+This continues the instructions from [Install the Open Horizon Services](01-horizon-services-setup.md).
 
 *NOTE*: This assumes you are running as root (with `sudo`) on the Ubuntu VM 
 as described in the previous set of instructions and are continuing in the same session. 
 If you are not, you may need to export all previous environment variables from step 1.
 
-## Build the Services
+### Create and Persist Environment Variables
+
+NOTE: Either set $IP to your server's IP address, 
+or replace `${IP}` in the two places below with the actual IP address.
 
 ``` bash
-cd /go/src/github.com/open-horizon/anax
-make
-cd test
-make
+export HZN_ORG_ID=testorg
+echo "export HZN_ORG_ID=testorg" >> ~/.bashrc
+export HZN_EXCHANGE_URL=http://${IP}:3090/v1/
+echo "export HZN_EXCHANGE_URL=http://${IP}:3090/v1/" >> ~/.bashrc
+export HZN_EXCHANGE_USER_AUTH='root/root:Horizon-Rul3s'
+echo "export HZN_EXCHANGE_USER_AUTH='root/root:Horizon-Rul3s'" >> ~/.bashrc
 ```
 
-If there were any errors (not warnings), you may have missed a step or your VM does not have enough memory 
-or the apt repo was busy with a mirror sync or there was a network hiccup.
+### Edit the Services Configuration JSON
 
-Please go back and check, then try again.
+NOTE: Again, this is assuming that you cloned this repository and it is located at `./horizon-edgex/`.
 
------
-
-Next, edit the Makefile to expose the exchange service to your VM's external IP address.
-
-Go to the `run-exchange:` section and change the IP address from `127.0.0.1` to `0.0.0.0`.
-
-Then build and run the services:
+Change to the `oh` folder and edit the `config.json` file appropriately.
 
 ``` bash
-make run-dockerreg
-make run-agbot
-make run-exchange
+cd horizon-edge/oh
 ```
 
-At this point the Horizon Services should be running.  
-You can confirm this by running `docker ps` and seeing four services running. 
-*NOTE*: You may need to open port 8080 to eternal requests if it is not already open.
+NOTE: I will be referring to nodes in the `config.json` file using XPath-like dot notation.
 
------
+If nothing else, substitute your server's IP address for the `${IP}` placeholder at `.horizon.hostname`.
 
-Last,  as the root user, we'll create an organization named `testorg` 
-and create a user in that organization with admin privileges named `joe` with a password of `cool`:
+The AgBot's name and token are specified at `.services.agbot.bot`.
+
+The Exchange's credentials are at both `.exchange.root` and `.exchange.password`, and `.exchange.admin`.
+
+The organization is specified at `.horizon.namespace` and `.exchange.org`.
+
+These instructions are assuming, and will be referring to, the default values specified at the nodes listed above.
+
+### Build and Start the Services
+
+NOTE: I am assuming that you are still in the `horizon-edgex/oh` directory.
 
 ``` bash
-export HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1
-export EDGE_EXCHANGE_ROOT_PASS="Horizon-Rul3s"
-export HZN_EXCHANGE_USER_AUTH="root/root:$EDGE_EXCHANGE_ROOT_PASS"
+make
+make up
+```
 
-curl -sSf -X POST -u "root/root:$EDGE_EXCHANGE_ROOT_PASS" -H "Content-Type:application/json" -d '{"label": "testorg", "description": "Organization for Testing"}' $HZN_EXCHANGE_URL/orgs/testorg | jq .
+Let's confirm that the Exchange is running (and our environment variable are configured correctly) by 
+requesting the endpoints for `version` and `status`:
 
-curl -sSf -X POST -u "root/root:$EDGE_EXCHANGE_ROOT_PASS" -H "Content-Type:application/json" -d '{"password":"cool","email": "joe@everywhere.com", "admin": true}' $HZN_EXCHANGE_URL/orgs/testorg/users/joe | jq .
+``` bash
+curl -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}admin/version
+```
 
-export ORG_ID=testorg
-export HZN_EXCHANGE_USER_AUTH=joe:cool
+``` bash
+curl -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}admin/status | jq .
+```
+
+If all is well, let's continue by listing the existing Organizations:
+
+``` bash
+curl -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs | jq .
+```
+
+Add an Organization names `testorg`:
+
+``` bash
+curl -sSf -X POST -u ${HZN_EXCHANGE_USER_AUTH} -H "Content-Type:application/json" -d '{"label": "testorg", "description": "Organization for Testing"}' ${HZN_EXCHANGE_URL}orgs/testorg | jq .
+```
+
+And then list the existing Organizations again to see `testorg` now in the list:
+
+``` bash
+curl -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs | jq .
+```
+
+If all is well, let's "prime the pump" by clearing the tables and refilling to a known state:
+
+``` bash
+make prime
+```
+
+Please note that the step you just performed also told your new AgBot `agbot1` to listen for  
+Deployment Patterns and Policies from the `testorg` Organization.
+
+### Add Admin User
+
+First, list the current users in `testorg`, which should be empty and throw a 404 error:
+
+``` bash
+curl -sSf -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/testorg/users | jq .
+```
+
+Then we'll add our admin user:
+
+``` bash
+curl -sSf -X POST -u ${HZN_EXCHANGE_USER_AUTH} -H "Content-Type:application/json" -d '{"password":"cool","email": "joe@everywhere.com", "admin": true}' ${HZN_EXCHANGE_URL}orgs/testorg/users/joe | jq .
+```
+
+And then list the current users again to confirm that the new user is now in the list:
+
+``` bash
+curl -sSf -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/testorg/users | jq .
 ```
 
 ## Next
 
-[Install the Anax Agent](03-install-agent.md) software.
+[Install the Open Horizon Agent](03-install-agent.md).
