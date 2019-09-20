@@ -8,8 +8,7 @@ If you are not, you may need to export all previous environment variables from s
 
 ### Create and Persist Environment Variables
 
-NOTE: Either set $IP to your server's IP address, 
-or replace `${IP}` in the two places below with the actual IP address.
+NOTE: Replace `${IP}` in the two places below with the actual IP address.
 
 ``` bash
 export HZN_ORG_ID=testorg
