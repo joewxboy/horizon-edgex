@@ -90,7 +90,7 @@ Deployment Patterns and Policies from the `testorg` Organization.
 
 ### Add Admin User
 
-First, list the current users in `testorg`, which should be empty and throw a 404 error:
+First, list the current users in `testorg`:
 
 ``` bash
 curl -sSf -u ${HZN_EXCHANGE_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/testorg/users | jq .
