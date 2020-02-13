@@ -36,14 +36,9 @@ services:
     ports:
       - ${AGBOT_PORT}:${AGBOT_PORT}
     volumes:
-      - ${AGBOT_KEYS_DIR}:/certs
       - ${AGBOT_CONFIG_FILE}:/etc/horizon/anax.json
-      - ${HZN_PUBLICKEY_FILE}:/etc/horizon/trust/mtn-publicKey.pem
-      - ${HZN_CACERTS_FILE}:/etc/horizon/trust/horizon.pem
-      - ${CSSDB_VOLUME_NAME}:/var/wiotp-edge/persist
-      - ${AGBOT_POLICY_DIR}:/etc/agbot/policy.d
-      - ${AGBOT_COLONUS_DIR}:/var/horizon
     environment:
+      - HZN_VAR_BASE=/home/agbotuser
       - AGBOT_NAME=${EXCHANGE_AGBOT_NAME}
       - CSS_URL=${CSS_URL}
       - EXCH_APP_HOST=${EXCHANGE_URL}
@@ -95,11 +90,9 @@ services:
           - ${HZN_NAMESPACE}-css-api
     volumes:
       - ${CSS_CONFIG_DIR}:/etc/edge-sync-service
-      - ${CSS_KEYS_DIR}:/certs
       - ${CSSDB_VOLUME_NAME}:/var/wiotp-edge/persist
     environment:
       - HZN_EXCHANGE_URL=${EXCHANGE_URL}
-      - HZN_EXCHANGE_CA_CERT=/certs/domain.crt
   ##
   ## css-db
   ##
@@ -109,8 +102,6 @@ services:
     restart: always
     volumes:
       - ${CSSDB_VOLUME_NAME}:/var/wiotp-edge/persist
-    ports:
-      - 27017:27017
     networks:
       ${HZN_NETWORK}:
         aliases:

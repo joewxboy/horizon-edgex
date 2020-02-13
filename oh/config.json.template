@@ -1,6 +1,6 @@
 {
   "horizon": {
-    "hostname": "9.46.67.197",
+    "hostname": "${MY_IP}",
     "namespace": "testorg",
     "network": {
       "name": "hznnet",

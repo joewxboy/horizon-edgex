@@ -1,8 +1,8 @@
-# Install the Open Horizon Services
+# Install the Open Horizon Hub Services
 
 ## Pre-requisites
 
-### Open Horizon Services (Exchange, Switchboard, AgBots, Sync Service)
+### Open Horizon Hub Services (Exchange, Switchboard, AgBots, Sync Service)
 + OS: Ubuntu server, latest build recommended.  Instructions assume this.
 + VM: 4Gb RAM, 20Gb storage, 1vCPU, root access
 + NOTE: Ensure you are not installing and running this on a system that already has a service using port 80.
@@ -13,7 +13,7 @@
 
 ## Initial setup
 
-Stand up your environment for the Horizon Services and open a shell to update utilities.  
+Stand up your environment for the Horizon Hub Services and open a shell to update utilities.
 *NOTE*: You will need to perform all of these tasks as root.
 
 If you clone this repository, it will be easier to modify and use the configuration and resource files. 
@@ -41,4 +41,4 @@ apt-get install -y docker-compose
 
 ## Next
 
-[Build and Run](02-build-and-run-horizon.md) the Open Horizon Services.
+[Build and Run](02-build-and-run-horizon.md) the Open Horizon Hub Services.
