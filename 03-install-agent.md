@@ -118,12 +118,12 @@ docker --version
 
 Configure package manager for the Anax Agent:
 
-IMPORTANT, Copy the next 6 lines verbatim and paste in one operation. 
+If you operating system is not xenial (16.x) then update the following appropriately for bionic (18.x).
 *NOTE*: If you did not copy the CRLF after `EOF`, then you will need to press Enter/Return on your keyboard.
 
 ``` bash
 wget -qO - http://pkg.bluehorizon.network/bluehorizon.network-public.key | apt-key add -
-aptrepo=updates
+aptrepo=testing
 cat <<EOF > /etc/apt/sources.list.d/bluehorizon.list
 deb [arch=$(dpkg --print-architecture)] http://pkg.bluehorizon.network/linux/ubuntu xenial-$aptrepo main
 deb-src [arch=$(dpkg --print-architecture)] http://pkg.bluehorizon.network/linux/ubuntu xenial-$aptrepo main
@@ -137,7 +137,7 @@ Refresh package manager index list
 apt-get -y update
 ```
 
-Install and test the Agent
+Install and the Agent
 
 ``` bash
 apt-get -y install bluehorizon
@@ -149,7 +149,7 @@ IMPORTANT, exit out of root, back to your user account
 exit
 ```
 
-Check the version to confirm that Horizon is installed and working
+Check the version to confirm that the Horizon CLI is installed and working
 
 ``` bash
 hzn version
@@ -163,22 +163,23 @@ hzn node list
 When you look at the output for `hzn node list`, pay attention to the line for the exchange api:
 
 ``` json
-"exchange_api": "https://alpha.edge-fabric.com/v1/"
+"exchange_api": ""
 ```
 
 When the Agent is properly configured, 
-it will point to the public IP address of the Horizon Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
-and is useful for confirming proper configuration.
+it will point to the public IP address of the Horizon Services that you stood up earlier, and is useful for confirming proper configuration.
 
-To fix this, you will edit the responsible configuration file and then restart the agent service.
+To fix this, you will edit the horizon agent configuration file and then restart the agent service.
 
-Edit the file at `/etc/horizon/hzn.json` using `sudo` 
-and add the value for the exchange URL to be of the form `http://127.0.0.1:8080/v1/`. 
 Please note two important details: first, the protocol is `http` instead of `https` (due to lack of a public signed cert), 
 and second, the URL *must* end with a trailing slash, even though the corresponding environment variable does not.  
-Replace `127.0.0.1` with the actual public IP address of your Horizon Services.
 
-Also edit the file at `/etc/default/horizon` using `sudo` to add the same exchange URL to the end of the first line.
+Edit the file at `/etc/default/horizon` using `sudo` to set the exchange URL (HZN_EXCHANGE_URL) to `http://${MY_IP}:3090/v1/`.
+
+Also add the MSS URL and set your device id.
+
+Edit the file at `/etc/default/horizon` using `sudo` to set the MMS URL (HZN_FSS_CSSURL) to `http://${MY_IP}:9443`.
+Edit the file at `/etc/default/horizon` using `sudo` to set the device id (HZN_DEVICE_ID) to whatever you want, e.g. mynode.
 
 Restart the Agent service:
 
@@ -186,7 +187,11 @@ Restart the Agent service:
 sudo systemctl restart horizon
 ```
 
-and confirm that the change took effect by re-running `hzn node list` and checking the `exchange_api` value.
+and confirm that the changes took effect by re-running `hzn node list` and checking the `exchange_api` value.
+
+Also, verify that the "exchange_version" is correct.
+If it is an empty string, then the agent does not have network connectivity to the exchange.
+You will need to resolve this problem before you continue.
 
 # Next
 

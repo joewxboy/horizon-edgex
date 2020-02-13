@@ -4,7 +4,7 @@ This continues the instructions from [Install the Open Horizon Services](01-hori
 [Build and Run](02-build-and-run-horizon.md) the Open Horizon Services and 
 [Install the Open Horizon Agent](03-install-agent.md) software.
 
-First, configure environment variables so the agent can connect to the exchange.
+Configure environment variables so the openhorizon CLI can connect to the exchange.
 
 *NOTE*: Replace `127.0.0.1` below with the actual _external_ IP address of the exchange VM.
 
@@ -12,7 +12,8 @@ First, configure environment variables so the agent can connect to the exchange.
 export HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1
 export ORG_ID=testorg
 export HZN_ORG_ID=testorg
-export HZN_EXCHANGE_USER_AUTH=joe:cool
+export HZN_EXCHANGE_USER_AUTH=admin:adminpw
+echo "export HZN_EXCHANGE_USER_AUTH='admin:adminpw'" >> ~/.bashrc
 hzn exchange user list
 ```
 
@@ -20,9 +21,9 @@ The results of `hzn exchange user list` should be something like the following:
 
 ``` json
 {
-  "testorg/joe": {
+  "testorg/admin": {
     "admin": true,
-    "email": "joe@everywhere.com",
+    "email": "admin@testorg",
     "lastUpdated": "2019-08-19T12:25:06.754Z[UTC]",
     "password": "********",
     "updatedBy": "root/root"
@@ -30,33 +31,36 @@ The results of `hzn exchange user list` should be something like the following:
 }
 ```
 
-Second, we'll generate signing keys and place them in a temporary directory:
+Next we will publish an example EdgeX service to the openhorizon hub and then tell the agent to run the service.
 
 ``` bash
-mkdir -p /tmp/hzndev
-chmod a+rwx /tmp/hzndev
-hzn key create -l 4096 testorg joe@everywhere.com -d /tmp/hzndev
+cd ./horizon-edgex
+```
+
+First, we'll generate an RSA key pair to be used for signing the edge service.
+A service is one or more microservices that are deployed on an edge device as containers.
+A service has to be signed so that the agent can verify that autheticity of the service definition.
+This command will put the keys into a default location where other CLI commands know where to find them.
+
+``` bash
+hzn key create -l 4096 testorg joe@everywhere.com
 ```
 
 This will return something like:
 
 ```
 Created keys:
- 	/tmp/hzndev/testorg-433683b019219acf8cb22790746d92937b62d994-private.key
-	/tmp/hzndev/testorg-433683b019219acf8cb22790746d92937b62d994-public.pem
+        /root/.hzn/keys/service.private.key
+        /root/.hzn/keys/service.public.pem
 ```
 
-Copy the string in the key filenames between `testorg-` and `-p` in the filename.  We'll use that below.
-
-Place the [service.json](./configs/service.json) and [pattern.json](./configs/pattern.json) files 
-into the `/tmp/hzndev` folder, or modify the paths below to point to where they currently reside.
-
-This will publish the _service_ definition to the exchange.  Remember to replace the `433...` string with your value:
+Publish the _service_ definition to the exchange.
+The command will run for a bit, and will pull each container from the container registry so that it can obtain the container digest.
+The digest is recorded in the published service definition.
+This example service is composed of several EdgeX microservices.
 
 ```
-hzn exchange service publish -P -f /tmp/hzndev/service.json \
-  -k /tmp/hzndev/testorg-433683b019219acf8cb22790746d92937b62d994-private.key \
-  -K /tmp/hzndev/testorg-433683b019219acf8cb22790746d92937b62d994-public.pem
+hzn exchange service publish -P -f ./configs/service.json
 ```
 
 Now check to ensure that the service definition was published and is available in the exchange:
@@ -73,10 +77,12 @@ The above should respond with the following, if successful:
 ]
 ```
 
-Next, publish the _pattern_ to the exchange:
+Next, publish a _pattern_ to the exchange.
+A pattern is the easiest way for a node to indicate which services it should run.
+Policy based service deployment is also supported, but is slightly more complex to setup.
 
 ```
-hzn exchange pattern publish -f /tmp/hzndev/pattern.json
+hzn exchange pattern publish -f ./configs/pattern.json
 ```
 
 Now check to ensure the pattern is available:
@@ -93,43 +99,9 @@ It should respond with:
 ]
 ```
 
-Last, let's configure the Anax Agent so that it can register for the Deployment Pattern.
+Last, let's register the openhorizon agent with the hub, so that it will begin executing the service.
 
-Set some environment variables:
-
-``` bash
-export HZN_ORG_ID='testorg'
-export HZN_DEVICE_ID='ubuntuvm' # Or whatever name you want to use here
-export HZN_DEVICE_TOKEN='iamnotapw'
-export HZN_EXCHANGE_USER_AUTH='joe:cool'
-export EXCHANGE_NODEAUTH="$HZN_DEVICE_ID:$HZN_DEVICE_TOKEN"
-export PATTERN='testorg/pattern-edgex-amd64'
-```
-
-Create a file in /tmp/hzndev named [input.json](./configs/input.json):
-
-``` json
-{
-  "services": [
-    {
-      "org": "testorg",
-      "url": "com.github.joewxboy.horizon.edgex",
-      "versionRange": "[0.0.0,INFINITY)",
-      "variables": {
-      	"EXPORT_DISTRO_CLIENT_HOST":     "export-client",
-        "EXPORT_DISTRO_DATA_HOST":       "edgex-core-data",
-        "EXPORT_DISTRO_CONSUL_HOST":     "edgex-config-seed",
-        "EXPORT_DISTRO_MQTTS_CERT_FILE": "none",
-        "EXPORT_DISTRO_MQTTS_KEY_FILE":  "none",
-        "LOG_LEVEL":                     "info",
-        "LOGTO":                         ""
-      }
-    }
-  ]
-}
-```
-
-Manually create the volumes that will be used:
+To prepare the node, manually create the volumes that will be used by the edge services:
 
 ```
 docker volume create db-data
@@ -154,10 +126,10 @@ chmod -R a+rwx /root/res
 
 Copy the configuration files from the `res` folder in this repository to the `/root/res` folder on the host.
 
-Then register for the pattern:
+Now register the node:
 
 ``` bash
-hzn register testorg pattern-edgex-amd64 -f /tmp/hzndev/input.json
+hzn register -p pattern-edgex-amd64 --policy ./configs/node.policy
 ```
 
 To confirm that your edge node is registered for the pattern, run:
@@ -166,7 +138,7 @@ To confirm that your edge node is registered for the pattern, run:
 hzn node list
 ```
 
-and confirm that the response shows your node ID of `ubuntuvm` 
+and confirm that the response shows your node ID. 
 and that you're configured for the `testorg/pattern-edgex-amd64` pattern.
 
 To check on the status of the agreement, use:

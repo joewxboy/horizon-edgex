@@ -33,10 +33,6 @@ HZN_HOSTNAME := $(if ${HZN_HOSTNAME},${HZN_HOSTNAME},$(shell hostname -f))
 HZN_NETWORK := $(if ${HZN_NETWORK},${HZN_NETWORK},"hznnet")
 HZN_NETWORK_DRIVER := $(if ${HZN_NETWORK_DRIVER},${HZN_NETWORK_DRIVER},"bridge")
 
-## key files
-HZN_PUBLICKEY_FILE := ${PWD}/publickey.pem
-HZN_CACERTS_FILE := ${PWD}/cacerts.pem
-
 ## for TLS certificates
 SOMECOMP := somecomp.com
 SOMEUSER := e2edev
@@ -88,11 +84,6 @@ POSTGRES_HOSTNAME := $(if $(wildcard postgres.json),$(shell jq -r '.connection.p
 POSTGRES_PORT := $(if $(wildcard postgres.json),$(shell jq -r '.connection.postgres.hosts[].port' postgres.json),${EXCHANGEDB_PORT})
 
 ## CLOUD SYNC SERVICE
-CSS_KEYS_DIR := ${PWD}/certs
-CSS_KEYS_KEY := ${CSS_KEYS_DIR}/css.key 
-CSS_KEYS_CRT := ${CSS_KEYS_DIR}/css.crt
-CSS_KEYS_SUBJ := ${SOMESUBJ}
-CSS_KEYS := ${CSS_KEYS_KEY} ${CSS_KEYS_CRT}
 CSS_CONFIG_DIR := ${PWD}/css
 CSS_CONFIG_FILE := ${CSS_CONFIG_DIR}/sync.conf
 CSS_CONTAINER_NAME := $(shell jq -r '.services.css.name' config.json)
@@ -134,20 +125,15 @@ EXCHANGE_AGBOT_TOKEN := $(shell jq -r '.services.agbot.bot.token' config.json)
 ### TARGETS
 ###
 
-default: keys config ${DOCKER_COMPOSE}
-
-keys: ${CSS_KEYS} ${AGBOT_KEYS} ${EXCHANGE_KEYS}
+default: config ${DOCKER_COMPOSE}
 
 CONFIGS := \
 	  ${DOCKER_COMPOSE} \
 	  ${EXCHANGE_CONFIG_FILE} \
 	  ${CSS_CONFIG_FILE} \
-	  ${AGBOT_CONFIG_FILE} \
-	  ${PWD}/anax.json \
-	  ${PWD}/hzn.json \
-	  ${PWD}/default.horizon
+	  ${AGBOT_CONFIG_FILE}
 
-config: makefile ${CONFIGS} ${AGBOT_POLICY_DIR} ${AGBOT_COLONUS_DIR}
+config: makefile ${CONFIGS}
 
 up: ${DOCKER_COMPOSE} keys config
 	docker-compose up -d
@@ -185,14 +171,6 @@ ${CSS_CONFIG_DIR}/sync/auth.json:
 	chmod 777 ${CSS_CONFIG_DIR}/sync
 	echo '{"regularUsers":[],"syncAdmins":[]}' > ${CSS_CONFIG_DIR}/sync/auth.json
 
-${AGBOT_POLICY_DIR}: config.json
-	-mkdir -p $@
-	chmod 777 $@
-
-${AGBOT_COLONUS_DIR}: config.json
-	-mkdir -p $@ $@/.colonus
-	chmod 777 $@ $@/.colonus
-
 ##
 ## CONFIGURATION FILES
 ##
@@ -205,8 +183,6 @@ ${CONFIGS}: config.json makefile
 	  HZN_NAMESPACE='${HZN_NAMESPACE}' \
 	  HZN_NETWORK='${HZN_NETWORK}' \
 	  HZN_NETWORK_DRIVER='${HZN_NETWORK_DRIVER}' \
-	  HZN_PUBLICKEY_FILE='${HZN_PUBLICKEY_FILE}' \
-	  HZN_CACERTS_FILE='${HZN_CACERTS_FILE}' \
 	  EXCHANGE_CONTAINER_NAME='${EXCHANGE_CONTAINER_NAME}' \
 	  EXCHANGE_CONTAINER_IMAGE='${EXCHANGE_CONTAINER_IMAGE}' \
 	  EXCHANGE_CONTAINER_TAG='${EXCHANGE_CONTAINER_TAG}' \
@@ -224,14 +200,11 @@ ${CONFIGS}: config.json makefile
 	  EXCHANGE_ROOT='${EXCHANGE_ROOT}' \
 	  EXCHANGE_AGBOT_NAME='${EXCHANGE_AGBOT_NAME}' \
 	  EXCHANGE_AGBOT_TOKEN='${EXCHANGE_AGBOT_TOKEN}' \
-	  AGBOT_POLICY_DIR='${AGBOT_POLICY_DIR}' \
-	  AGBOT_COLONUS_DIR='${AGBOT_COLONUS_DIR}' \
 	  AGBOT_CONFIG_DIR='${AGBOT_CONFIG_DIR}' \
 	  AGBOT_CONFIG_FILE='${AGBOT_CONFIG_FILE}' \
 	  AGBOT_CONTAINER_NAME='${AGBOT_CONTAINER_NAME}' \
 	  AGBOT_CONTAINER_IMAGE='${AGBOT_CONTAINER_IMAGE}' \
 	  AGBOT_CONTAINER_TAG='${AGBOT_CONTAINER_TAG}' \
-	  AGBOT_KEYS_DIR='${AGBOT_KEYS_DIR}' \
 	  AGBOT_LISTEN='${AGBOT_LISTEN}' \
 	  AGBOT_PORT='${AGBOT_PORT}' \
 	  AGBOT_URL='${AGBOT_URL}' \
@@ -263,37 +236,6 @@ ${CONFIGS}: config.json makefile
 	  POSTGRES_DATABASE='${POSTGRES_DATABASE}' \
 	  && cat $${F}.tmpl | envsubst > $@
 
-## KEYS
-${AGBOT_KEYS}:
-	-mkdir -p ${AGBOT_KEYS_DIR}
-	@openssl req \
-	  -newkey rsa:4096 \
-	  -nodes -sha256 -x509 \
-	  -keyout ${AGBOT_KEYS_KEY}  \
-	  -days 365 \
-	  -out ${AGBOT_KEYS_CRT} \
-	  -subj ${AGBOT_KEYS_SUBJ}
-
-${CSS_KEYS}:
-	-mkdir -p ${CSS_KEYS_DIR}
-	@openssl req \
-	  -newkey rsa:4096 \
-	  -nodes -sha256 -x509 \
-	  -keyout ${CSS_KEYS_KEY} \
-	  -days 365 \
-	  -out ${CSS_KEYS_CRT} \
-	  -subj ${CSS_KEYS_SUBJ}
-
-${EXCHANGE_KEYS}:
-	mkdir -p ${EXCHANGE_KEYS_DIR}
-	openssl req \
-	  -newkey rsa:4096 \
-	  -nodes -sha256 -x509 \
-	  -keyout ${EXCHANGE_KEYS_KEY} \
-	  -days 365 \
-	  -out ${EXCHANGE_KEYS_CRT} \
-	  -subj ${EXCHANGE_KEYS_SUBJ}
-
 ## ADMINISTRIVIA
 
 .PHONY: keys config up down clean prime remove remove-images reset-db realclean distclean tidy
@@ -318,10 +260,7 @@ reset-db:
 	  && curl -sLX POST -H "Authorization:Basic ${EXCHANGE_ROOT}:$${TOKEN}" "${EXCHANGE_URL}/admin/dropdb" | jq -r '.msg'
 	-curl -sLX POST -H "Authorization:Basic ${EXCHANGE_ROOT}:$(EXCHANGE_PASSWORD)" "${EXCHANGE_URL}/admin/initdb" | jq -r '.msg'
 
-tidy:
-	-rm -fr anax.json hzn.json default.horizon
-
-clean: tidy remove
+clean: remove
 	sudo rm -fr ${DOCKER_COMPOSE} css agbot exchange
 
 realclean:  clean

@@ -11,28 +11,27 @@ exchange_db_reset()
   if [ -z "${password}" ] || [ -z "${url}" ]; then
     echo "${FUNCNAME[0]}: invalid arguments"
   else
-    result=$(curl -sLX POST --header "Authorization:Basic ${account}:${password}" "${url}/admin/upgradedb" | jq -r '.msg')
     while true; do
-      result=$(curl -sLX GET --header "Authorization:Basic ${account}:${password}" "${url}/admin/dropdb/token" | jq -r '.token')
-      if [ -z "${result}" ]; then
+      token=$(curl -sLX GET -u ${account}:${password} "${url}/admin/dropdb/token" | jq -r '.token')
+      if [ -z "${token}" ]; then
 	sleep 5
       else
 	break
       fi
     done
-    if [ -z "${result}" ]; then
-      echo "${FUNCNAME[0]}: no dropdb token"
+    if [ -z "${token}" ]; then
+      echo "${FUNCNAME[0]}: no dropdb token, skipping DB drop"
     else
+      result=$(curl -sLX POST -u ${account}:${token} "${url}/admin/dropdb" | jq -r '.msg')
       echo "${FUNCNAME[0]}: dropdb: ${result}"
     fi
-    result=$(curl -sLX POST --header "Authorization:Basic ${account}:${password}" "${url}/admin/initdb" | jq -r '.msg')
+    result=$(curl -sLX POST -u ${account}:${password} "${url}/admin/initdb" | jq -r '.msg')
     if [ -z "${result}" ]; then
       echo "${FUNCNAME[0]}: no response from initdb"
     else
       echo "${FUNCNAME[0]}: initializedb: ${result}"
     fi
   fi
-  echo "${result:-false}"
 }
 
 exchange_create_org()
@@ -44,7 +43,7 @@ exchange_create_org()
   local type=${5:-}
   local result
 
-  result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"label":"'${org}'","description":"","orgType":"'${type}'"}' "${url}/orgs/${org}" | jq -r '.msg')
+  result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"label":"'${org}'","description":"","orgType":"'${type}'"}' "${url}/orgs/${org}" | jq -r '.msg')
   if [ -z "${result}" ]; then
     echo "${FUNCNAME[0]}: no response to creating org: ${org:-null}; type: ${type:-null}" &> /dev/stderr
   else
@@ -62,7 +61,7 @@ exchange_delete_org()
   local type=${5:-}
   local result
 
-  result=$(curl -sLX DELETE --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"label":"'${org}'","description":"","orgType":"'${type}'"}' "${url}/orgs/${org}" | jq -r '.msg')
+  result=$(curl -sLX DELETE --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"label":"'${org}'","description":"","orgType":"'${type}'"}' "${url}/orgs/${org}" | jq -r '.msg')
   if [ -z "${result}" ]; then
     echo "${FUNCNAME[0]}: no response to deleting org: ${org:-null}; type: ${type:-null}" &> /dev/stderr
   else
@@ -86,7 +85,7 @@ exchange_create_user()
   if [ -z "${account}" ] || [ -z "${password}" ] || [ -z "${url}" ] || [ -z "${org}" ] || [ -z "${user}" ]; then
     echo "${FUNCNAME[0]}: invalid arguments"
   else
-    result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"password":"'${token}'","email":"'${email}'","admin":'${admin}'}' "${url}/orgs/${org}/users/${user}" | jq -r '.msg')
+    result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"password":"'${token}'","email":"'${email}'","admin":'${admin}'}' "${url}/orgs/${org}/users/${user}" | jq -r '.msg')
     if [ -z "${result}" ]; then
       echo "${FUNCNAME[0]}: no response to creating user: ${user:-null} in org: ${org:-null}" &> /dev/stderr
     else
@@ -111,7 +110,7 @@ exchange_delete_user()
   if [ -z "${account}" ] || [ -z "${password}" ] || [ -z "${url}" ] || [ -z "${org}" ] || [ -z "${user}" ]; then
     echo "${FUNCNAME[0]}: invalid arguments"
   else
-    result=$(curl -sLX DELETE --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"password":"'${token}'","email":"'${email}'","admin":'${admin}'}' "${url}/orgs/${org}/users/${user}" | jq -r '.msg')
+    result=$(curl -sLX DELETE --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"password":"'${token}'","email":"'${email}'","admin":'${admin}'}' "${url}/orgs/${org}/users/${user}" | jq -r '.msg')
     if [ -z "${result}" ]; then
       echo "${FUNCNAME[0]}: no response to deleting user: ${user:-null} from org: ${org:-null}" &> /dev/stderr
     else
@@ -133,7 +132,7 @@ exchange_register_agbot()
   local publicKey=${8:-}
   local result
 
-  result=$(curl -sLX PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"token":"'${token}'","name":"'${name}'","msgEndPoint":"'${msgEndPoint}'","publicKey":"'${publicKey}'"}' "${url}/orgs/${org}/agbots/${name}" | jq -r '.msg')
+  result=$(curl -sLX PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"token":"'${token}'","name":"'${name}'","msgEndPoint":"'${msgEndPoint}'","publicKey":"'${publicKey}'"}' "${url}/orgs/${org}/agbots/${name}" | jq -r '.msg')
 
   if [ -z "${result}" ]; then
     echo "${FUNCNAME[0]}: no response to registering agbot: ${name:-null}; type: ${type:-null}" &> /dev/stderr
@@ -152,11 +151,11 @@ exchange_register_allpattern()
   local name=${5:-}
   local result
 
-  result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"patternOrgid":"'${org}'","pattern":"*", "nodeOrgid": "'${org}'"}' "${url}/orgs/${org}/agbots/${name}/patterns" | jq -r '.msg')
+  result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"patternOrgid":"'${org}'","pattern":"*", "nodeOrgid": "'${org}'"}' "${url}/orgs/${org}/agbots/${name}/patterns" | jq -r '.msg')
   if [ -z "${result}" ]; then
-    echo "${FUNCNAME[0]}: no response to registering agbot: ${name:-null}; type: ${type:-null}" &> /dev/stderr
+    echo "${FUNCNAME[0]}: no response configuring agbot for patterns: ${name:-null}; type: ${type:-null}" &> /dev/stderr
   else
-    echo "${FUNCNAME[0]}: registering agbot: ${name:-null}; type: ${type:-null}; result: ${result}" &> /dev/stderr
+    echo "${FUNCNAME[0]}: configuring agbot to serve patterns for org ${org}: ${name:-null}; type: ${type:-null}; result: ${result}" &> /dev/stderr
   fi
   echo "${result:-false}"
 }
@@ -169,12 +168,11 @@ exchange_register_allpolicy()
   local org=${4:-}
   local name=${5:-}
   local result
-
-  result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -H "Authorization:Basic ${account}:${password}" -d '{"businessPolOrgid":"'${org}'","businessPol":"*", "nodeOrgid": "'${org}'"}' "${url}/orgs/${org}/agbots/${name}/businesspols" | jq -r '.msg')
+  result=$(curl -sLX POST --header 'Content-Type: application/json' --header 'Accept: application/json' -u ${account}:${password} -d '{"businessPolOrgid":"'${org}'","businessPol":"*", "nodeOrgid": "'${org}'"}' "${url}/orgs/${org}/agbots/${name}/businesspols" | jq -r '.msg')
   if [ -z "${result}" ]; then
-    echo "${FUNCNAME[0]}: no response to registering agbot: ${name:-null}; type: ${type:-null}" &> /dev/stderr
+    echo "${FUNCNAME[0]}: no response configuring agbot for policies: ${name:-null}; type: ${type:-null}" &> /dev/stderr
   else
-    echo "${FUNCNAME[0]}: registering agbot: ${name:-null}; type: ${type:-null}; result: ${result}" &> /dev/stderr
+    echo "${FUNCNAME[0]}: configuring agbot to serve policies for org ${org}: ${name:-null}; type: ${type:-null}; result: ${result}" &> /dev/stderr
   fi
   echo "${result:-false}"
 }
@@ -205,14 +203,8 @@ AGBOT_NAME=${EXCHANGE_AGBOT_NAME:-null}
 AGBOT_TOKEN=${EXCHANGE_AGBOT_TOKEN:-null}
 
 ## EXCHANGEDB
-if [ "${URL}" != "http://${CONTAINER_NAME}:${PORT}/${VERSION:-v1}" ]; then
-  echo "Deleting existing organization: ${ORG:-null}; user: ${ADMIN_USER:-null}" &> /dev/stderr
-  exchange_delete_org "${ROOT}" ${PASSWORD} ${URL} "${ORG}"
-  exchange_delete_user "${ROOT}" ${PASSWORD} ${URL} "${ORG}" "${ADMIN_USER}" true "${ADMIN_PASSWORD}" "${ADMIN_EMAIL}"
-else
-  echo "Reseting database" &> /dev/stderr
-  exchange_db_reset "${ROOT}" "${PASSWORD}" "${URL}"
-fi
+echo "Reseting database" &> /dev/stderr
+exchange_db_reset "${ROOT}" "${PASSWORD}" "${URL}"
 
 ## ORG
 result=$(exchange_create_org ${ROOT} ${PASSWORD} ${URL} ${ORG})
@@ -221,7 +213,7 @@ if [ "${result:-}"  = 'false' ]; then
   exit 1
 fi
 
-## create administrative user
+## create administrative user in the new org
 result=$(exchange_create_user ${ROOT} ${PASSWORD} ${URL} ${ORG} ${ADMIN_USER} true ${ADMIN_PASSWORD})
 if [ "${result:-}"  = 'false' ]; then
   echo "Failed to create user: ${ADMIN_USER:-null}; admin: true; password: ${ADMIN_PASSWORD:-null}" &> /dev/stderr
