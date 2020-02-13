@@ -1,6 +1,6 @@
 # Build and Run the Open Horizon Hub Services
 
-This continues the instructions from [Install the Open Horizon Services](01-horizon-services-setup.md).
+This continues the instructions from [Install the Open Horizon Hub Services](01-horizon-services-setup.md).
 
 *NOTE*: This assumes you are running as root (with `sudo`) on the Ubuntu VM 
 as described in the previous set of instructions and are continuing in the same session. 

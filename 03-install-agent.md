@@ -1,7 +1,7 @@
 # Install the Open Horizon Agent
 
-This continues the instructions from [Install the Open Horizon Services](01-horizon-services-setup.md) and 
-[Build and Run](02-build-and-run-horizon.md) the Open Horizon Services.
+This continues the instructions from [Install the Open Horizon Hub Services](01-horizon-services-setup.md) and 
+[Build and Run](02-build-and-run-horizon.md) the Open Horizon Hub Services.
 
 Stand up your environment in the other tier for the Horizon Agent (Anax) and open a shell.  
 Do not attempt this in the same environment as the Horizon Services 
@@ -167,18 +167,20 @@ When you look at the output for `hzn node list`, pay attention to the line for t
 ```
 
 When the Agent is properly configured, 
-it will point to the public IP address of the Horizon Services that you stood up earlier, and is useful for confirming proper configuration.
+it will point to the public IP address of the Horizon Hub Services that you stood up earlier, and is useful for confirming proper configuration.
 
 To fix this, you will edit the horizon agent configuration file and then restart the agent service.
 
 Please note two important details: first, the protocol is `http` instead of `https` (due to lack of a public signed cert), 
 and second, the URL *must* end with a trailing slash, even though the corresponding environment variable does not.  
 
-Edit the file at `/etc/default/horizon` using `sudo` to set the exchange URL (HZN_EXCHANGE_URL) to `http://${MY_IP}:3090/v1/`.
+NOTE: Replace `x.x.x.x` with the actual IP address of the machine running the Open Horizon Hub Services.
+
+Edit the file at `/etc/default/horizon` using `sudo` to set the exchange URL (HZN_EXCHANGE_URL) to `http://x.x.x.x:3090/v1/`.
 
 Also add the MSS URL and set your device id.
 
-Edit the file at `/etc/default/horizon` using `sudo` to set the MMS URL (HZN_FSS_CSSURL) to `http://${MY_IP}:9443`.
+Edit the file at `/etc/default/horizon` using `sudo` to set the MMS URL (HZN_FSS_CSSURL) to `http://x.x.x.x:9443`.
 Edit the file at `/etc/default/horizon` using `sudo` to set the device id (HZN_DEVICE_ID) to whatever you want, e.g. mynode.
 
 Restart the Agent service:

@@ -2,7 +2,8 @@
 
 This is a set of instructions to demonstrate one method for using the 
 [Open Horizon](https://github.com/open-horizon) project to 
-deliver and monitor a simple deployment of [EdgeX Foundry](https://wiki.edgexfoundry.org).  
+deliver and monitor a simple deployment of [EdgeX Foundry](https://wiki.edgexfoundry.org).
+
 The EdgeX Foundry instance will contain a 
 [Random Integer Device Service](https://docs.edgexfoundry.org/Ch-ExamplesRandomDeviceService.html) 
 that will post a simple random event message every five seconds.
@@ -15,7 +16,7 @@ However, it is sufficient to test services.
 
 ### Run the Services and Agent
 
-These instructions will show you how to configure and run a single instance of the Open Horizon Services (Exchange, Switchboard, AgBots, Sync Service) within a Virtual Machine (VM) in one logical tier, 
+These instructions will show you how to configure and run a single instance of the Open Horizon Hub Services (Exchange, Switchboard, AgBots, Sync Service) within a Virtual Machine (VM) in one logical tier, 
 and the Open Horizon Agent (Anax) in another tier.  While the Agent could be deployed in the same logical tier as the Services, this example keeps it separate so that you can more easily see how to deploy multiple instances of the Agent connecting to a single deployment of the Services.  
 
 ### Configure an Organization and Account

@@ -1,15 +1,15 @@
 # Configure the Anax Agent
 
-This continues the instructions from [Install the Open Horizon Services](01-horizon-services-setup.md) and 
-[Build and Run](02-build-and-run-horizon.md) the Open Horizon Services and 
+This continues the instructions from [Install the Open Horizon Hub Services](01-horizon-services-setup.md) and 
+[Build and Run](02-build-and-run-horizon.md) the Open Horizon Hub Services and 
 [Install the Open Horizon Agent](03-install-agent.md) software.
 
 Configure environment variables so the openhorizon CLI can connect to the exchange.
 
-*NOTE*: Replace `127.0.0.1` below with the actual _external_ IP address of the exchange VM.
+NOTE: Replace `x.x.x.x` with the actual IP address of the machine running the Open Horizon Hub Services.
 
 ``` bash
-export HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1
+export HZN_EXCHANGE_URL=http://x.x.x.x:3090/v1
 export ORG_ID=testorg
 export HZN_ORG_ID=testorg
 export HZN_EXCHANGE_USER_AUTH=admin:adminpw
@@ -34,6 +34,7 @@ The results of `hzn exchange user list` should be something like the following:
 Next we will publish an example EdgeX service to the openhorizon hub and then tell the agent to run the service.
 
 ``` bash
+git clone https://github.com/joewxboy/horizon-edgex.git
 cd ./horizon-edgex
 ```
 
