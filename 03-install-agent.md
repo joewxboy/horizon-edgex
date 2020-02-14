@@ -35,7 +35,7 @@ docker --version
 Download and install the Edge Fabric client
 
 ``` bash
-wget http://pkg.bluehorizon.network/macos/horizon-cli-2.23.13.pkg
+wget http://pkg.bluehorizon.network/macos/horizon-cli-2.23.29.pkg
 ```
 
 Install first (you may use the GUI and double-click on the file to install), 
@@ -60,7 +60,7 @@ When you look at the output for `hzn node list`, pay attention to the line for t
 ```
 
 When the Anax agent is properly configured, 
-it will point to the public IP address of the Horizon Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
+it will point to the public IP address of the Horizon Hub Services that you stood up earlier instead of `alpha.edge-fabric.com`, 
 and is useful for confirming proper configuration.
 
 To fix, stop the container, create a file at `/etc/default/horizon` with the contents below, then restart the container and test.
@@ -72,11 +72,12 @@ sudo touch /etc/default/horizon
 ```
 
 Then edit the `/etc/default/horizon` file and insert the following contents. 
-*NOTE*: Replace `127.0.0.1` with your Horizon Services public IP address.
+
+NOTE: Replace `x.x.x.x` with the actual IP address of the machine running the Open Horizon Hub Services.
 
 ```
-HZN_EXCHANGE_URL=http://127.0.0.1:8080/v1/
-HZN_FSS_CSSURL=https://alpha.edge-fabric.com/css/
+HZN_EXCHANGE_URL=http://x.x.x.x:3090/v1/
+HZN_FSS_CSSURL=http://x.x.x.x:9443
 ```
 
 Then re-start the container:
