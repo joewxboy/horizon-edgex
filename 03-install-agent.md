@@ -32,17 +32,41 @@ Test after install
 docker --version
 ```
 
-Download and install the Edge Fabric client
+Download and install the Agent's certificate
+
+``` bash
+wget http://pkg.bluehorizon.network/macos/certs/horizon-cli.crt
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain horizon-cli.crt
+```
+
+Download and install the Agent
 
 ``` bash
 wget http://pkg.bluehorizon.network/macos/horizon-cli-2.24.18.pkg
+sudo installer -pkg "horizon-cli-2.24.18.pkg" -target /
 ```
 
-Install first (you may use the GUI and double-click on the file to install), 
-then start the client using the command below:
+The output of running the command should look something like this:
+
+```
+installer: Package name is horizon-cli-2.24.18
+installer: Upgrading at base path /
+installer: The upgrade was successful.
+```
+
+If you are installing the Agent for the first time,
+start the client using the command below:
 
 ``` bash
 horizon-container start
+```
+
+If you had a previous version already installed, and are upgrading the Agent, 
+use the following instead:
+
+``` bash
+horizon-container update
+horizon-container restart
 ```
 
 Test after install
