@@ -35,7 +35,7 @@ docker --version
 Download and install the Edge Fabric client
 
 ``` bash
-wget http://pkg.bluehorizon.network/macos/horizon-cli-2.23.29.pkg
+wget http://pkg.bluehorizon.network/macos/horizon-cli-2.24.18.pkg
 ```
 
 Install first (you may use the GUI and double-click on the file to install), 
