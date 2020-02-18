@@ -1,4 +1,6 @@
 # Delivering EdgeX Foundry with Open Horizon
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjoewxboy%2Fhorizon-edgex.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjoewxboy%2Fhorizon-edgex?ref=badge_shield)
+
 
 This is a set of instructions to demonstrate one method for using the 
 [Open Horizon](https://github.com/open-horizon) project to 
@@ -44,3 +46,6 @@ which will stand up the micro-services, monitor them, and keep them running.
 ## FAQ
 
 TBD
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjoewxboy%2Fhorizon-edgex.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjoewxboy%2Fhorizon-edgex?ref=badge_large)
