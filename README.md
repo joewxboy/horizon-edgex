@@ -1,3 +1,5 @@
+# NOTE: This repo has been deprecated.  Please see [the EdgeX Foundry/Open Horizon integration repo](https://github.com/edgexfoundry-holding/open-horizon-integration/tree/master/hub) for an updated version.
+
 # Delivering EdgeX Foundry with Open Horizon
 
 This is a set of instructions to demonstrate one method for using the 
